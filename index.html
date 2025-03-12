@@ -8,16 +8,25 @@
   </head>
   <body onload="onInit()">
     <h1>MineSweeper - sprint 1</h1>
-    <button class="easy" onclick="setDifficulty(4)">Easy</button>
-    <button class="medium" onclick="setDifficulty(5)">Medium</button>
-    <button class="hard" onclick="setDifficulty(6)">Hard</button>
+    <button class="easy levels" onclick="setDifficulty(4)">Easy</button>
+    <button class="medium levels" onclick="setDifficulty(8)">Medium</button>
+    <button class="hard levels" onclick="setDifficulty(12)">Hard</button>
     <br />
-    <button class="restart" onclick="onRestart()">Restart</button>
-
-    <table class="board-container">
-      <tbody class="board"></tbody>
-    </table>
-
+    <h2 class="lives">❤️ Lives: 3</h2>
+    
+    <div class="game">
+      <button class="restart" onclick="onRestart()">😊</button>
+      <table class="board-container">
+        <tbody class="board"></tbody>
+      </table>
+    </div>
+    
+    <div id="win-modal" class="modal">
+      <div class="modal-content">
+        <h2>🎉 You Won! 🎉</h2>
+        <button onclick="onRestart()">Play Again</button>
+      </div>
+    </div>
     <script src="js/main.js"></script>
     <script src="js/util.js"></script>
   </body>
