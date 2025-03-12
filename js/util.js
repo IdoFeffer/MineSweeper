@@ -1,7 +1,7 @@
 "use strict"
 
-function getRandomIntInclusive(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min)) // max not inclusive
 }
 
 function makeId(length = 6) {
@@ -25,8 +25,8 @@ function getRandomColor() {
 }
 
 function getRandomColor() {
-    const letters = '0123456789ABCDEF'
-    var color = '#'
+  const letters = "0123456789ABCDEF"
+  var color = "#"
 }
 
 function getEmptyCell() {
@@ -47,3 +47,26 @@ function getEmptyCell() {
 function playEatingSound() {
   new Audio("sounds/collectFood.mp3").play()
 } // change to what i need
+
+function createMat(rows, cols) {
+  var mat = []
+  for (var i = 0; i < rows; i++) {
+    var row = []
+    for (var j = 0; j < cols; j++) {
+      row.push("")
+    }
+    mat.push(row)
+  }
+  return mat
+}
+
+function renderCell(location, value) {
+  // Select the elCell and set the value
+  const elCell = document.querySelector(`.cell-${location.i}-${location.j}`)
+  elCell.innerHTML = value
+}
+
+// function getClassName(location) {
+//   const cellClass = "cell-" + location.i + "-" + location.j
+//   return cellClass
+// }
