@@ -72,15 +72,15 @@ function renderBoard(board) {
         ? "💣"
         : cell.minesAroundCount > 0
         ? cell.minesAroundCount
-        // : cell.style.backgroundColor = "#fff"
-        : "⬜"
+        : // : cell.style.backgroundColor = "#fff"
+          "⬜"
       strHTML += `<td class="${className}" style="${cellStyle}" 
         onclick="onCellClicked(this, ${i}, ${j})"
         oncontextmenu="onCellMarked(event, ${i}, ${j})">
         ${cellContent}
         </td>`
-        if (!cell.isMine && cell.minesAroundCount === 0 && !cell.isCovered) {
-          document.querySelector(`.${className}`).style.backgroundColor = "#fff";
+      if (!cell.isMine && cell.minesAroundCount === 0 && !cell.isCovered) {
+        document.querySelector(`.${className}`).style.backgroundColor = "#fff"
       }
     }
     strHTML += "</tr>"
@@ -317,13 +317,17 @@ function updateSmiley(isWin = null) {
 // }
 
 function showGameOver(isWin) {
-  console.log("🔥 showGameOver called with isWin =", isWin) // בדיקה אם הפונקציה רצה
+  console.log("🔥 showGameOver called with isWin =", isWin)
+
+  if(!gGame.isOn) return
 
   if (gGame.lives === 0) {
-    showGameOver(false)
     console.log("Game over!")
+    gGame.isOn = false
+    showGameOver(false)
     return
   }
+
   var totalCells = gLevel.SIZE ** 2
   var noneMineCells = totalCells - gLevel.MINES
   var revealedCells = 0
@@ -331,21 +335,29 @@ function showGameOver(isWin) {
   for (var i = 0; i < gBoard.length; i++) {
     for (var j = 0; j < gBoard[0].length; j++) {
       const cell = gBoard[i][j]
-      console
-        .log
-        // `Cell (${i},${j}): isMine=${cell.isMine}, isCovered=${cell.isCovered}`
-        ()
-
+      if (!cell.isCovered && !cell.isCovered) {
+        revealedCells++
+      }
+      // `Cell (${i},${j}): isMine=${cell.isMine}, isCovered=${cell.isCovered}`
       if (!cell.isMine && !cell.isCovered) {
         revealedCells++
       }
     }
   }
   if (revealedCells === noneMineCells) {
-    showGameOver(true)
-    gGame.isOn = false
     console.log("you win")
+    gGame.isOn = false
+    showGameModal()
   }
+}
+
+function showGameModal(isWin){
+  const elModal = document.querySelector('.modal')
+  const elMsg = document.querySelector('.modal-msg')
+
+  elModal.classList.remove('hidden')
+  elModal.style.display = 'block'
+  elMsg.innerText = isWin ? "You win": 'Game over'
 }
 
 function activateHint(elHints) {
@@ -364,7 +376,7 @@ function activateHint(elHints) {
     }
   }
   if (emptyCells.length === 0) return
-  var randIdx = Math.floor(Math.random() *emptyCells.length)
+  var randIdx = Math.floor(Math.random() * emptyCells.length)
   var chooseCell = emptyCells[randIdx]
 
   setTimeout(() => {
@@ -375,7 +387,7 @@ function activateHint(elHints) {
 }
 
 function toggleDarkMode() {
-  document.body.classList.toggle('dark-mode');
+  document.body.classList.toggle("dark-mode")
 }
 
 // function revealHintCells(rowIdx, colIdx) {
