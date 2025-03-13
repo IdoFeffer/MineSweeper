@@ -4,6 +4,10 @@ body {
   background-color: var(--background-color-light);  color: black;
   color: var(--text-color-light);
   font-size: 25px;
+  /* background-image: url('https://w7.pngwing.com/pngs/189/731/png-transparent-red-and-white-comics-boom-miscellaneous-angle-leaf.png'); */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: #faebd7;
 }
 
 .board {
@@ -17,11 +21,11 @@ body {
 }
 
 .board td {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   border: 1px solid black;
   background-color: grey;
-  transition: 0.3s;
+  transition: 0.5s;
 }
 
 .restart {
@@ -44,7 +48,7 @@ td:hover {
   background-color: lightblue;
 }
 
-.hint.used {
+.hints.used {
   opacity: 0.5; 
   pointer-events: none; 
 }
@@ -55,13 +59,15 @@ td:hover {
 
 .modal {
   border: 5px solid black;
-  width: 200px;
+  /* height: 50px; */
+  width: 50px;
   text-align: center;
   background-color: #dad5d5;
   border-radius: 10px;
   position: absolute;
   top: 150px;
   left: calc(50vw - 100px);
+  margin-top: 150px;
 }
 
 .modal button {
@@ -69,7 +75,7 @@ td:hover {
   background-color: #614f4f;
   border: none;
   border-radius: 10px;
-  width: 80%;
+  width: 20px;
   margin: 10px auto;
 }
 
@@ -102,4 +108,12 @@ td:hover {
 
 .hidden {
   display: none;
+}
+
+.hints {
+  margin-bottom: 15px;
+}
+
+.safe-btn{
+  margin-left: 10px;
 }

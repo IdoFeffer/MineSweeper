@@ -14,23 +14,28 @@
     <button class="hard btn level" onclick="setDifficulty(12)">Hard</button>
     <br />
     <h2 class="lives">❤️ Lives: 3</h2>
+    <p class="safe-clicks">🛡️ Safe Clicks: 3</p>
+    <p>🥇 Score: <span class="score">0</span></p>
     
     <div class="hints">
       <span class="hint" onclick="activateHint(this)">💡</span>
       <span class="hint" onclick="activateHint(this)">💡</span>
       <span class="hint" onclick="activateHint(this)">💡</span>
+      <button onclick="safeClick()" class="safe btn">Safe button</button>
+      <button class="undo btn" onclick="undoMove()">↩️ UNDO</button>
     </div>
     
+    <div id="modal" class="modal hidden">
+      <p class="modal-msg"></p>
+    </div>
+
     <div class="game">
-      <button class="restart" onclick="onRestart()">🙂</button>
+      <button class="restart" onclick="onRestart()">😁</button>
       <table class="board-container">
         <tbody class="board"></tbody>
       </table>
     </div>
 
-    <div id="modal" class="modal hidden">
-      <p class="modal-msg"></p>
-    </div>
     
     <script src="js/main.js"></script>
     <script src="js/util.js"></script>
