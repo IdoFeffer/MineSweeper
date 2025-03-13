@@ -9,7 +9,7 @@ var gBoard = {
 
 var gLevel = {
   SIZE: 4,
-  MINES: 2,
+  MINES: 3,
 }
 
 var gGame = {
@@ -57,11 +57,13 @@ function renderBoard(board) {
 
       var cellStyle = ""
       if (!cell.isCovered && cell.isMine) {
-        cellStyle = "background-color: red; color: white;" // רקע אדום לטקסט בולט
+        cellStyle = "background-color: red; color: white;"
       }
 
       const cellContent = cell.isCovered
-        ? ""
+        ? cell.isMarked
+          ? "🚩"
+          : ""
         : cell.isMine
         ? "💣"
         : cell.minesAroundCount > 0
@@ -72,11 +74,6 @@ function renderBoard(board) {
         oncontextmenu="onCellMarked(event, ${i}, ${j})">
         ${cellContent}
         </td>`
-      // strHTML += `<td class="${className}"
-      // onclick="onCellClicked(this, ${i}, ${j})"
-      // oncontextmenu="onCellMarked(event, ${i}, ${j})">
-      // ${cellContent}
-      //           </td>`
     }
     strHTML += "</tr>"
   }
@@ -136,6 +133,7 @@ function onCellClicked(elCell, i, j) {
   if (cell.isMine) {
     gGame.lives--
     updateLivesDisplay()
+    updateSmiley()
     elCell.style.backgroundColor = "red"
     cell.isCovered = false
 
@@ -171,13 +169,14 @@ function revealBoard() {
 
 function onCellMarked(event, i, j) {
   event.preventDefault()
+
   const cell = gBoard[i][j]
-  if (gGame.isOn) return
+  if (cell.isCovered) return
 
   cell.isMarked = !cell.isMarked
 
-  const cellFlag = cell.isMarked ? "🚩" : ""
-  renderCell({ i, j }, cellFlag)
+  renderCell({ i, j }, cell.isMarked ? "🚩" : "")
+  checkGameOver()
 }
 
 function expandReveal(board, rowIdx, colIdx) {
@@ -186,6 +185,7 @@ function expandReveal(board, rowIdx, colIdx) {
     for (var j = colIdx - 1; j <= colIdx + 1; j++) {
       if (j < 0 || j >= board[0].length || (i === rowIdx && j === colIdx))
         continue
+
       const neighbor = board[i][j]
 
       if (!neighbor.isCovered) continue
@@ -207,19 +207,32 @@ function getClassName(location) {
 function onRestart() {
   document.querySelector(".restart")
   gGame.lives = 3
+  updateSmiley()
   updateLivesDisplay()
   onInit()
 }
 
 function renderCell(location, value) {
   const elCell = document.querySelector(`.cell-${location.i}-${location.j}`)
-  if (elCell) {
-    elCell.innerHTML = value
-    if (value === "💣") {
-      elCell.style.backgroundColor = "red"
-      elCell.style.color = "white"
-    }
+  if (!elCell) return
+
+  const cell = gBoard[location.i][location.j]
+
+  if (cell.isMarked) {
+    elCell.innerHTML = "🚩"
+    return
   }
+
+  // if (!elCell.isConnected && cell.isMine){
+  //   elCell.innerHTML = "💣"
+  //   elCell.style.backgroundColor = "red"
+  //   elCell.style.color = "white"
+  //   return
+  if (value === "💣") {
+    elCell.style.backgroundColor = "red"
+    elCell.style.color = "white"
+  }
+  elCell.innerHTML = value
 }
 
 function setDifficulty(newSize) {
@@ -234,40 +247,52 @@ function updateLivesDisplay() {
   elLives.innerText = `❤️ Lives: ${gGame.lives}`
 }
 
-// function checkGameOver() {
-//   for (var i = 0; i < gBoard.length; i++) {
-//     for (j = 0; j < gBoard[0].length; j++) {
-//       var cell = gBoard[i][j]
+function updateSmiley(isWin = null) {
+  const elSmiley = document.querySelector(".restart")
+  if (isWin === true) {
+    elSmiley.innerText = "😎"
+  } else if (gGame.lives === 0) {
+    elSmiley.innerText = "☠️"
+  } else if (gGame.lives < 3) {
+    elSmiley.innerText = "😨"
+  } else if (gGame.lives === 3) {
+    elSmiley.innerText = "🙂"
+  }
+}
 
-//       if (!cell.isMine && cell.isCovered) {
-//         return
-//       }
-//     }
-//   }
-// console.log('win');
-// }
-// function checkGameOver(gBoard) {
-//   var isGameOver = true
-//   var totalCoveredCells = 0
-//   var totalCells = gLevel.SIZE * gLevel.SIZE
+function checkGameOver(isWin) {
+  gGame.isOn = false
 
-//   for (var i = 0; i < gBoard.length; i++) {
-//     for (var j = 0; j < gBoard[0].length; j++) {
-//       var currCell = gBoard[i][j]
-//       if (currCell.isCovered) {
-//         totalCoveredCells++
-//       }
+  const elModal = document.querySelector(".modal")
+  elModal.style.display = "block"
 
-//       if (currCell.isCovered && !currCell.isMine) {
-//         isGameOver = false
-//       }
-//     }
-//   }
+  const elSmiley = document.querySelector(".smiley")
+  if (isWin) {
+    elModal.innerHTML = "🎉 You Win! 🎉"
+    elSmiley.innerText = "😎"
+  } else {
+    elModal.innerHTML = "💀 Game Over! 💀"
+    elSmiley.innerText = "😵"
+  }
+  setTimeout(() => elModal.remove(), 3000)
+}
 
-//   if (totalCoveredCells === gGame.lives) {
-//     alert("You Win!")
-//     gGame.isOn = false
-//   }
-
-//   return isGameOver
-// }
+function checkGameOver() {
+  if (gGame.lives === 0) {
+    showGameOver(false)
+    console.log("Game over!")
+    return
+  }
+  var allCellsRevealed = true
+  for (var i = 0; i < gBoard.length; i++) {
+    for (var j = 0; j < gBoard[0].length; j++) {
+      const cell = gBoard[i][j]
+      if (!cell.isMine && cell.isCovered) {
+        allCellsRevealed = false
+      }
+    }
+  }
+  if (allCellsRevealed) {
+    showGameOver(true)
+  }
+}
