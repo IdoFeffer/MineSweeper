@@ -1,7 +1,9 @@
 body {
   font-family: "Franklin Gothic Medium", "Arial Narrow";
   text-align: center;
-  background-color: antiquewhite;
+  background-color: var(--background-color-light);  color: black;
+  color: var(--text-color-light);
+  font-size: 25px;
 }
 
 .board {
@@ -32,7 +34,7 @@ body {
   display: inline-block;
 }
 
-.levels {
+.btn {
   border-radius: 10px;
   cursor: pointer;
   height: 30px;
@@ -40,4 +42,49 @@ body {
 
 td:hover {
   background-color: lightblue;
+}
+
+.hint.used {
+  opacity: 0.5; 
+  pointer-events: none; 
+}
+
+.hide {
+  display: none;
+}
+
+.modal {
+  border: 5px solid black;
+  width: 200px;
+  text-align: center;
+  background-color: #dad5d5;
+  border-radius: 10px;
+  position: absolute;
+  top: 150px;
+  left: calc(50vw - 100px);
+}
+
+.modal button {
+  margin: 10px;
+  background-color: #614f4f;
+  border: none;
+  border-radius: 10px;
+  width: 80%;
+  margin: 10px auto;
+}
+
+.dark-mode {
+  background-color: var(--background-color-dark);
+  color: var(--text-color-dark);
+}
+
+:root {
+  --background-color-light: #ffffff;
+  --text-color-light: #000000;
+  --text-color-dark: #ffffff;
+  --background-color-dark: #121212;
+}
+
+.level {
+  background-color: #faebd7
 }

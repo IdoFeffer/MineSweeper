@@ -8,11 +8,18 @@
   </head>
   <body onload="onInit()">
     <h1>MineSweeper - sprint 1</h1>
-    <button class="easy levels" onclick="setDifficulty(4)">Easy</button>
-    <button class="medium levels" onclick="setDifficulty(8)">Medium</button>
-    <button class="hard levels" onclick="setDifficulty(12)">Hard</button>
+    <button class="darkMode btn" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    <button class="easy btn level" onclick="setDifficulty(4)">Easy</button>
+    <button class="medium btn level" onclick="setDifficulty(8)">Medium</button>
+    <button class="hard btn level" onclick="setDifficulty(12)">Hard</button>
     <br />
     <h2 class="lives">❤️ Lives: 3</h2>
+    
+    <div class="hints">
+      <span class="hint" onclick="activateHint(this)">💡</span>
+      <span class="hint" onclick="activateHint(this)">💡</span>
+      <span class="hint" onclick="activateHint(this)">💡</span>
+    </div>
     
     <div class="game">
       <button class="restart" onclick="onRestart()">🙂</button>
