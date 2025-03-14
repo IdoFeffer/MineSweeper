@@ -8,35 +8,60 @@
   </head>
   <body onload="onInit()">
     <h1>MineSweeper - sprint 1</h1>
-    <button class="darkMode btn" onclick="toggleDarkMode()">Toggle Dark Mode</button>
-    <button class="easy btn level" onclick="setDifficulty(4)">Easy</button>
-    <button class="medium btn level" onclick="setDifficulty(8)">Medium</button>
-    <button class="hard btn level" onclick="setDifficulty(12)">Hard</button>
-    <br />
-    <h2 class="lives">❤️ Lives: 3</h2>
-    <p class="safe-clicks">🛡️ Safe Clicks: 3</p>
-    <p>🥇 Score: <span class="score">0</span></p>
-    
-    <div class="hints">
-      <span class="hint" onclick="activateHint(this)">💡</span>
-      <span class="hint" onclick="activateHint(this)">💡</span>
-      <span class="hint" onclick="activateHint(this)">💡</span>
-      <button onclick="safeClick()" class="safe btn">Safe button</button>
-      <button class="undo btn" onclick="undoMove()">↩️ UNDO</button>
+
+    <div class="dark-mode-toggle">
+      <label class="switch">
+        <input type="checkbox" id="darkModeToggle" onclick="toggleDarkMode()">
+        <span class="slider round"></span>
+      </label>
+      <span id="darkModeLabel">Dark Mode</span>
     </div>
     
+    <div class="buttons-headline">
+      <button class="easy btn level" onclick="setDifficulty(4)">Easy</button>
+      <button class="medium btn level" onclick="setDifficulty(8)">Medium</button>
+      <button class="hard btn level" onclick="setDifficulty(12)">Hard</button>
+      <br>
+      <button class="btn" onclick="enableManualMode()">Manually Position Mines</button>
+      <button class="btn" onclick="startGameAfterManualMines()">Start Game</button>
+    </div>
+
+    <br />
+    <div class="stats">
+      <h3 class="lives">❤️ Lives: 3</h3>
+
+      <span class="restart" onclick="onRestart()">😃</span>
+
+      <div class="game">
+        <table class="board-container">
+          <tbody class="board"></tbody>
+        </table>
+      </div>
+
+      <h7 class="timer">⏳ Timer: 60</h7>
+      <h7>🥇 Score: <span class="score">0</span></h7>
+
+      <div class="help">
+        <h4 class="safe-clicks" onclick="safeClick()">🛡️ Safe Clicks: 3</h4>
+        <button class="blow btn" onclick="exterminateMines()">Exterminator💥</button>
+        <button class="undo btn" onclick="undoMove()">↩️ UNDO</button>
+      </div>
+
+    <button onclick="safeClick()" class="safe btn">Safe button</button>
+    
+    <div class="hints">
+      <button class="hint" onclick="activateMegaHint()">Mega help</button>
+      <span class="hint" onclick="activateHint(this)">💡</span>
+      <span class="hint" onclick="activateHint(this)">💡</span>
+      <span class="hint" onclick="activateHint(this)">💡</span>
+    </div>
+
     <div id="modal" class="modal hidden">
       <p class="modal-msg"></p>
     </div>
 
-    <div class="game">
-      <button class="restart" onclick="onRestart()">😁</button>
-      <table class="board-container">
-        <tbody class="board"></tbody>
-      </table>
-    </div>
 
-    
+    <h6>by Ido Feffer</h6>
     <script src="js/main.js"></script>
     <script src="js/util.js"></script>
   </body>
