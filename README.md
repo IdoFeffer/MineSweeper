@@ -16,7 +16,7 @@ Safe Clicks - Use up to 3 safe clicks to reveal a guaranteed safe cell.
 
 Undo Feature - Undo your last move.
 
-Dark Mode - Toggle between light and dark themes.
+Dark Mode - Toggle between light and dark modes.
 
 Score Tracking - Keep track of your progress.
 
