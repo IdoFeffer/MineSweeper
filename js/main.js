@@ -23,7 +23,6 @@ var gGame = {
   isHint: false,
   score: 0,
   safeClick: 3,
-  isManualMode: false,
   isMegaMode: false,
 }
 
@@ -37,9 +36,9 @@ function onInit() {
   gBoard = buildBoard()
   renderBoard(gBoard)
   showGameOver()
-  gTimer = 60
   clearInterval(gInterval)
   gInterval = null
+  startTimer()
 }
 
 function buildBoard() {
@@ -198,10 +197,6 @@ function onCellClicked(elCell, i, j) {
     return
   }
 
-  if (gGame.isManualMode) {
-    if (gBoard[i][j].isMine) return
-  }
-
   if (gGame.isHint) {
     gGame.isHint = false
     revealHintedCells(i, j)
@@ -236,10 +231,10 @@ function onCellClicked(elCell, i, j) {
   }
 
   if (gGame.isMegaMode) {
-    if (gGam.megaHintCells.length < 2) {
-      gGame.megaHintCells.push({i, j})
+    if (gGame.megaHintCells.length < 2) {
+      gGame.megaHintCells.push({ i, j })
 
-      if ( gGame.megaHintCells.length === 2) {
+      if (gGame.megaHintCells.length === 2) {
         revealMegaHintArea()
         gGame.isMegaMode = false
       }
@@ -253,13 +248,15 @@ function onCellClicked(elCell, i, j) {
 }
 
 function revealMegaHintArea() {
-if (gGame.megaHintCells.length < 2) return
+  if (gGame.megaHintCells.length < 2) return
 
   // var [first, second] = gGame.megaHintCells
   var first = gGame.megaHintCells[0]
   var second = gGame.megaHintCells[1]
 
-  console.log(`Revealing area from (${first.i}, ${first.j}) to (${second.i}, ${second.j})`)
+  console.log(
+    `Revealing area from (${first.i}, ${first.j}) to (${second.i}, ${second.j})`
+  )
 
   for (var i = first.i; i <= second.i; i++) {
     for (var j = first.j; j <= second.j; j++) {
@@ -307,10 +304,8 @@ function onCellMarked(event, i, j) {
 
   if (cell.isMine && cell.isMarked) {
     gGame.score += 5
-    cell.isMarked = false
   } else if (cell.isMine && !cell.isMarked) {
     gGame.score -= 5
-    cell.isMarked = true
   }
   updateScore()
 }
@@ -370,9 +365,9 @@ function onRestart() {
   gGame.isHint = false
 
   var elHints = document.querySelectorAll(".hint")
-  elHints.forEach(hint => {
+  elHints.forEach((hint) => {
     hint.style.backgroundColor = ""
-    hint.classList.remove("used") 
+    hint.classList.remove("used")
   })
 
   updateSmiley()
@@ -455,7 +450,7 @@ function safeClick() {
   var elCell = document.querySelector(`.cell-${safeCell.i}-${safeCell.j}`)
   if (!elCell) return
 
-  elCell.style.backgroundColor = 'blue'
+  elCell.style.backgroundColor = "lightblue"
 
   setTimeout(() => {
     elCell.style.backgroundColor = ""
@@ -466,13 +461,13 @@ function safeClick() {
 }
 
 function updateSafeClicksDisplay() {
-  var elSafeClicks = document.querySelector(".safe-clicks");
+  var elSafeClicks = document.querySelector(".safe-clicks")
   if (!elSafeClicks) {
-      return;
+    return
   }
 
-  elSafeClicks.innerText = `🛡️ Safe clicks: ${gGame.safeClick}`;
-  console.log("Updating safe clicks display:", gGame.safeClick);
+  elSafeClicks.innerText = `🛡️ Safe clicks: ${gGame.safeClick}`
+  console.log("Updating safe clicks display:", gGame.safeClick)
 }
 
 function showGameOver() {
@@ -589,6 +584,7 @@ function startTimer() {
 
   var elTimer = document.querySelector(".timer")
   gTimer = 60
+
   elTimer.innerText = `⏳ Timer: ${gTimer.toFixed(0)}`
 
   gInterval = setInterval(() => {
@@ -607,7 +603,9 @@ function startTimer() {
       elTimer.innerText = "⏳ Timer: 0"
       gGame.isOn = false
       showGameOver(true)
+      return
     }
+    console.log(`⏳ Timer: ${gTimer}`)
   }, 1000)
 }
 
@@ -635,14 +633,6 @@ function revealHintedCells(row, col) {
     gGame.isHint = false
     renderBoard(gBoard)
   }, 1500)
-}
-
-function enableManualMode() {
-  gGame.isManualMode = true
-  gGame.isFirstClick = false
-  gBoard = buildBoard()
-  renderBoard(gBoard)
-  console.log("Manual mine placement mode ON")
 }
 
 function activateMegaHint() {
@@ -673,6 +663,6 @@ function exterminateMines() {
     gBoard[minesToRemove.i][minesToRemove.j].isMine = false
   }
 
-    setMinesNegsCount(gBoard)
-    renderBoard(gBoard)
+  setMinesNegsCount(gBoard)
+  renderBoard(gBoard)
 }
