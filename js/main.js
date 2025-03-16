@@ -38,7 +38,12 @@ function onInit() {
   showGameOver()
   clearInterval(gInterval)
   gInterval = null
-  startTimer()
+
+  const savedScore = localStorage.getItem("bestScore")
+  if (savedScore) {
+    gGame.score = parseInt(savedScore)
+    updateScore()
+  }
 }
 
 function buildBoard() {
@@ -183,8 +188,8 @@ function onCellClicked(elCell, i, j) {
     gGame.isFirstClick = false
     placeMines(gBoard, i, j)
     setMinesNegsCount(gBoard)
-    renderBoard(gBoard)
     startTimer()
+    renderBoard(gBoard)
   }
 
   if (gGame.isMegaMode) {
@@ -312,11 +317,15 @@ function onCellMarked(event, i, j) {
 
 function updateScore() {
   const elScore = document.querySelector(".score")
-  if (!elScore) {
-    return
-  }
+  if (!elScore) return
+
   console.log("📢 Score:", gGame.score)
   elScore.innerText = gGame.score
+
+  const bestScore = localStorage.getItem("bestScore")
+  if (!bestScore || gGame.score > parent(bestScore)) {
+    localStorage.setItem("best score", gGame.score)
+  }
 }
 
 function howManyBomb(SIZE) {
@@ -363,6 +372,10 @@ function onRestart() {
   gGame.lives = 3
   gGame.isFirstClick = true
   gGame.isHint = false
+  gGame.score = 0
+
+  updateSafeClicksDisplay()
+  updateScore()
 
   var elHints = document.querySelectorAll(".hint")
   elHints.forEach((hint) => {
@@ -398,6 +411,7 @@ function setDifficulty(newSize) {
   gLevel.SIZE = newSize
   howManyBomb(newSize)
   onRestart()
+  startTimer()
 }
 
 function updateLivesDisplay() {
